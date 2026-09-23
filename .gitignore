@@ -26,3 +26,5 @@ package-lock.json
 
 
 /frontend/out
+
+.env.local
