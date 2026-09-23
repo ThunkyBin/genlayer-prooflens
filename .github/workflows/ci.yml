@@ -1,30 +1,62 @@
-name: CI
+name: Test and deploy ProofLens
 
 on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
 jobs:
-  lint-contracts:
-    name: Lint Contracts
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install -r requirements.txt
-      - run: genvm-lint check contracts/football_bets.py
+      - name: Install contract dependencies
+        run: pip install -r requirements.txt
+      - name: Validate ProofLens contract
+        run: genvm-lint check contracts/proof_lens.py
+      - name: Run direct contract tests
+        run: pytest tests/direct/test_proof_lens.py -v
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install web dependencies
+        run: npm ci
+      - name: Build web app
+        env:
+          NEXT_PUBLIC_CONTRACT_ADDRESS: ${{ vars.NEXT_PUBLIC_CONTRACT_ADDRESS }}
+        run: npm run build
+      - name: Configure Pages
+        if: github.event_name == 'push'
+        uses: actions/configure-pages@v5
+      - name: Upload static site
+        if: github.event_name == 'push'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/out
 
-  test-direct:
-    name: Direct Mode Tests
+  deploy:
+    if: github.event_name == 'push'
+    needs: test
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - run: pip install -r requirements.txt
-      - run: pytest tests/direct/ -v
+      - name: Publish GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
