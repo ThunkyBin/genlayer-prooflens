@@ -1,7 +1,7 @@
 {
-  "name": "genlayer-football-betting",
+  "name": "genlayer-prooflens-web",
   "version": "1.0.0",
-  "description": "GenLayer Football Betting - AI-powered prediction betting on GenLayer blockchain.",
+  "description": "Verify public web claims with GenLayer validator consensus.",
   "main": "index.js",
   "scripts": {
     "dev": "next dev",

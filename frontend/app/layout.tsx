@@ -3,8 +3,8 @@ import "./globals.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "GenLayer Football Market",
-  description: "AI-powered football match predictions on GenLayer blockchain. Create bets, make predictions, and compete for points.",
+  title: "ProofLens · GenLayer",
+  description: "Verify public web claims with GenLayer validator consensus.",
   manifest: "/site.webmanifest",
   icons: {
     icon: [
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#9B6AF6", // GenLayer brand purple
+  themeColor: "#7c3aed",
 };
 
 export default function RootLayout({
