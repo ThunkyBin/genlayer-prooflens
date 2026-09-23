@@ -1,5 +1,7 @@
 # ProofLens for GenLayer
 
+Live app: https://thunkybin.github.io/genlayer-prooflens/
+
 ProofLens is a small GenLayer Intelligent Contract that checks a short claim against a public web page. GenLayer validators fetch the page, ask an LLM for a structured verdict, reach consensus through the equivalence principle, and store the result under the caller's address.
 
 The included Next.js interface connects an injected EVM wallet, submits a claim to Studionet, waits for validator consensus, and displays the verdict, confidence, and evidence.
