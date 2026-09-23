@@ -31,6 +31,9 @@ interface EthereumProvider {
 declare global {
   interface Window {
     ethereum?: EthereumProvider;
+    phantom?: {
+      ethereum?: EthereumProvider;
+    };
   }
 }
 
@@ -60,7 +63,7 @@ export function getContractAddress(): string {
  */
 export function isMetaMaskInstalled(): boolean {
   if (typeof window === "undefined") return false;
-  return !!window.ethereum?.isMetaMask;
+  return !!getEthereumProvider();
 }
 
 /**
@@ -68,7 +71,7 @@ export function isMetaMaskInstalled(): boolean {
  */
 export function getEthereumProvider(): EthereumProvider | null {
   if (typeof window === "undefined") return null;
-  return window.ethereum || null;
+  return window.phantom?.ethereum || window.ethereum || null;
 }
 
 /**
@@ -79,7 +82,7 @@ export async function requestAccounts(): Promise<string[]> {
   const provider = getEthereumProvider();
 
   if (!provider) {
-    throw new Error("MetaMask is not installed");
+    throw new Error("No compatible EVM wallet was found");
   }
 
   try {
@@ -145,7 +148,7 @@ export async function addGenLayerNetwork(): Promise<void> {
   const provider = getEthereumProvider();
 
   if (!provider) {
-    throw new Error("MetaMask is not installed");
+    throw new Error("No compatible EVM wallet was found");
   }
 
   try {
@@ -168,7 +171,7 @@ export async function switchToGenLayerNetwork(): Promise<void> {
   const provider = getEthereumProvider();
 
   if (!provider) {
-    throw new Error("MetaMask is not installed");
+    throw new Error("No compatible EVM wallet was found");
   }
 
   try {
@@ -209,7 +212,7 @@ export async function isOnGenLayerNetwork(): Promise<boolean> {
  */
 export async function connectMetaMask(): Promise<string> {
   if (!isMetaMaskInstalled()) {
-    throw new Error("MetaMask is not installed");
+    throw new Error("No compatible EVM wallet was found");
   }
 
   // Request accounts
