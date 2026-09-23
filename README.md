@@ -50,6 +50,11 @@ python -m venv .venv
 
 ## Deploy
 
+Current Studionet deployment:
+
+- Contract: `0xA1247706E0000f4895549c0eDD0b3612eaA729d4`
+- Explorer: https://explorer-studio.genlayer.com/address/0xA1247706E0000f4895549c0eDD0b3612eaA729d4
+
 Install the GenLayer CLI, choose a hosted development network, and deploy:
 
 ```bash
